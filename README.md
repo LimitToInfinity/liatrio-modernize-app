@@ -1,54 +1,73 @@
-# React + TypeScript + Vite
+# Liatrio Modernize It
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+Liatrio Modernize It is a React application that allows users to manage a list of "things". Users can add new things, mark them as completed or awaiting, and delete them. The application uses React Bootstrap for styling and a simple REST API for data persistence.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
 
-## Expanding the ESLint configuration
+- **React**: A JavaScript library for building user interfaces.
+- **React Bootstrap**: A library that provides Bootstrap components as React components.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **Fetch API**: A modern interface for making HTTP requests in the browser.
+- **SCSS**: A CSS preprocessor that adds features like variables, nested rules, and mixins.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Functionality
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Fetch Things
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The application fetches a list of things from the API and displays them in a card format. Each card shows the title, price, and completion status of the thing.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Add Thing
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Users can add a new thing by filling out a form with the title and price of the thing. The new thing is then sent to the API and added to the list.
+
+### Toggle Completion
+
+Users can mark a thing as completed or awaiting by clicking a button on the card. The completion status is updated in the API and the UI.
+
+### Delete Thing
+
+Users can delete a thing by clicking the "X" button on the top right of the card. The thing is removed from the API and the UI.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm (Node Package Manager)
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/liatrio-modernize-it.git
+
+   cd liatrio-modernize-it
+   npm install
+   npm start
+
+   API
+The application interacts with a REST API at http://localhost:3000/. The following endpoints are used:
+
+GET /things: Fetch all things.
+POST /things: Add a new thing.
+PATCH /things/:id: Update the completion status of a thing.
+DELETE /things/:id: Delete a thing.
+File Structure
+
+liatrio-modernize-it/
+├── public/
+│   ├── [index.html](http://_vscodecontentref_/0)
+│   └── ...
+├── src/
+│   ├── [App.tsx](http://_vscodecontentref_/1)
+│   ├── App.scss
+│   ├── index.tsx
+│   └── ...
+├── [package.json](http://_vscodecontentref_/2)
+├── [tsconfig.json](http://_vscodecontentref_/3)
+└── ...
+
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
