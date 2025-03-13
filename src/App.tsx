@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
 import "./App.scss";
 
 const apiUrl = 'http://localhost:3000/';
@@ -18,6 +19,7 @@ function App() {
 
   const [thingsObject, setThingsObject] = useState<Thing[]>([]);
   const [things, setThings] = useState<Thing[]>([]);
+  const [newThing, setNewThing] = useState({ title: '', price: 0 });
 
   const fetchThings = async () => {
     const response = await fetch(`${apiUrl}things`);
@@ -27,7 +29,7 @@ function App() {
 
     const apiThingsObject = JSON.parse(result.things_stored);
     const apiThings: Thing[] = Object.values(apiThingsObject);
-    setThings(apiThings);
+    setThings(apiThings.sort((a, b) => a.id - b.id));
   }
 
   useEffect(() => {
@@ -46,6 +48,32 @@ function App() {
     setThings(things.map((thing) => (thing.id === id ? updatedThing : thing)));
   };
 
+  const deleteThing = async (id: number) => {
+    await fetch(`${apiUrl}/things/${id}`, {
+      method: "DELETE",
+    });
+    setThings(things.filter((thing) => thing.id !== id));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewThing({ ...newThing, [name]: value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const response = await fetch(`${apiUrl}things`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newThing),
+    });
+    const createdThing = await response.json();
+    setThings([...things, createdThing]);
+    setNewThing({ title: '', price: 0 });
+  };
+
   const renderThings = () => {
     return things.map((thing) => (
       <Card
@@ -54,7 +82,10 @@ function App() {
         style={{ width: '20%', minWidth: '10rem', marginRight: '1rem', marginTop: '1rem', borderWidth: '2px' }}
       >
         <Card.Body>
-          <Card.Title>{thing.title}</Card.Title>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Card.Title>{thing.title}</Card.Title>
+            <Button variant="link" onClick={() => deleteThing(thing.id)} style={{ color: 'red', textDecoration: 'none' }}>X</Button>
+          </div>
           <Card.Subtitle>{thing.completed ? 'completed' : 'awaiting'}</Card.Subtitle>
           <Card.Text>Price {thing.price}</Card.Text>
           <Button
@@ -83,6 +114,31 @@ function App() {
           <Button onClick={fetchThings}>Fetch Things</Button>
           {renderThings()}
       </main>
+      <Form onSubmit={handleSubmit} style={{ margin: '1rem' }}>
+        <Form.Group controlId="formTitle">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            name="title"
+            value={newThing.title}
+            onChange={handleInputChange}
+            placeholder="Enter title"
+          />
+        </Form.Group>
+        <Form.Group controlId="formPrice">
+          <Form.Label>Price</Form.Label>
+          <Form.Control
+            type="number"
+            name="price"
+            value={newThing.price}
+            onChange={handleInputChange}
+            placeholder="Enter price"
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Add Thing
+        </Button>
+      </Form>
     </>
   );
 }
