@@ -1,0 +1,9 @@
+node_modules
+build
+dist
+eslint.config.js
+pnpm-lock.yaml
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
