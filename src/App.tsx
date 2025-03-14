@@ -33,6 +33,7 @@ function App() {
   const [things, setThings] = useState<Thing[]>([]);
   const [newThing, setNewThing] = useState({ title: '', price: 0 });
   const [priceInput, setPriceInput] = useState('');
+
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
