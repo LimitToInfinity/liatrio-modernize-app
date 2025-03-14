@@ -32,6 +32,7 @@ function App() {
   const [thingsObject, setThingsObject] = useState<ThingsObject>({ things_stored: {}, timestamp: '' });
   const [things, setThings] = useState<Thing[]>([]);
   const [newThing, setNewThing] = useState({ title: '', price: 0 });
+  const [priceInput, setPriceInput] = useState('');
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
@@ -69,15 +70,28 @@ function App() {
     setThings(things.filter((thing) => thing.id !== id));
   };
 
+  const formatPrice = (price: number) => {
+    return (price / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  };
+
+  const parsePrice = (price: string) => {
+    return Math.round(parseFloat(price.replace(/,/g, '')) * 100);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setNewThing({ ...newThing, [name]: value });
+    if (name === 'price') {
+      setPriceInput(value);
+      setNewThing({ ...newThing, [name]: parsePrice(value) });
+    } else {
+      setNewThing({ ...newThing, [name]: value });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newThing.price > 2147483647) {
-      setToastMessage('Price cannot exceed 2,147,483,647');
+      setToastMessage('Price cannot exceed 21,474,836.47');
       setShowToast(true);
       return;
     }
@@ -93,6 +107,7 @@ function App() {
       if (response.ok) {
         setThings([...things, createdThing]);
         setNewThing({ title: '', price: 0 });
+        setPriceInput('');
       } else {
         setToastMessage(`Failed to add new thing: ${createdThing.exception || 'please try again'}`);
         setShowToast(true);
@@ -119,7 +134,7 @@ function App() {
             <Button variant="link" onClick={() => deleteThing(thing.id)} style={{ color: 'red', textDecoration: 'none' }}>X</Button>
           </div>
           <Card.Subtitle>{thing.completed ? 'completed' : 'awaiting'}</Card.Subtitle>
-          <Card.Text>Price {thing.price}</Card.Text>
+          <Card.Text>Price ${formatPrice(thing.price)}</Card.Text>
           <Button
               variant={thing.completed ? 'outline-danger' : 'outline-success'}
               onClick={() => toggleCompleteThing(thing.id, !thing.completed)}
@@ -160,9 +175,9 @@ function App() {
         <Form.Group controlId="formPrice">
           <Form.Label>Price</Form.Label>
           <Form.Control
-            type="number"
+            type="text"
             name="price"
-            value={newThing.price}
+            value={priceInput}
             onChange={handleInputChange}
             placeholder="Enter price"
           />
