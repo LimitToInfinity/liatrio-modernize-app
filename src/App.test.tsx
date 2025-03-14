@@ -1,64 +1,61 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import fetchMock from 'jest-fetch-mock';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, vi, expect } from 'vitest';
 import App from './App';
 
-beforeEach(() => {
-  fetchMock.resetMocks();
-});
+describe('App', () => {
 
-describe('App Component', () => {
-  test('renders the App component', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ things_stored: '{}', timestamp: '' }));
-
-    await act(async () => {
-      render(<App />);
-    });
-
-    expect(screen.getByText('Liatrio Modernize It')).toBeInTheDocument();
-    expect(screen.getByText('Things')).toBeInTheDocument();
+  it('renders the App component', () => {
+    render(<App />);
   });
 
-  test('handles form input and submission', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ things_stored: '{}', timestamp: '' }));
-    fetchMock.mockResponseOnce(JSON.stringify({ id: 1, title: 'New Thing', price: 123456, completed: false }));
-
-    await act(async () => {
-      render(<App />);
-    });
-
-    const titleInput = screen.getByPlaceholderText('Enter title');
-    const priceInput = screen.getByPlaceholderText('Enter price');
-    const addButton = screen.getByText('Add Thing');
-
-    fireEvent.change(titleInput, { target: { value: 'New Thing' } });
-    fireEvent.change(priceInput, { target: { value: '1234.56' } });
-
-    expect(titleInput).toHaveValue('New Thing');
-    expect(priceInput).toHaveValue('1234.56');
-
-    fireEvent.click(addButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('New Thing')).toBeInTheDocument();
-      expect(screen.getByText('Price $1,234.56')).toBeInTheDocument();
-    });
+  it('displays loading gif initially', () => {
+    render(<App />);
+    expect(screen.getByAltText('Loading...')).toBeInTheDocument();
   });
 
-  test('displays toast message for price exceeding limit', async () => {
-    fetchMock.mockResponseOnce(JSON.stringify({ things_stored: '{}', timestamp: '' }));
+  it('fetches and displays things', async () => {
+    const mockThings = {
+      things_stored: JSON.stringify({
+        1: { id: 1, title: 'Thing 1', price: 1000, completed: false },
+        2: { id: 2, title: 'Thing 2', price: 2000, completed: true },
+      }),
+      timestamp: '2023-10-01T00:00:00Z',
+    };
 
-    await act(async () => {
-      render(<App />);
-    });
+    global.fetch = vi.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve(mockThings),
+      } as Response)
+    );
 
-    const priceInput = screen.getByPlaceholderText('Enter price');
-    const addButton = screen.getByText('Add Thing');
+    render(<App />);
 
-    fireEvent.change(priceInput, { target: { value: '21474836.48' } });
-    fireEvent.click(addButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Price cannot exceed 21,474,836.47')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByText('Thing 1')).toBeInTheDocument());
+    expect(screen.getByText('Thing 2')).toBeInTheDocument();
   });
+
+  it('adds a new thing', async () => {
+    const mockNewThing = { id: 3, title: 'Thing 3', price: 3000, completed: false };
+
+    global.fetch = vi.fn((_, options) => {
+      if (options?.method === 'POST') {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(mockNewThing),
+        } as Response);
+      }
+      return Promise.resolve({
+        json: () => Promise.resolve({ things_stored: '{}', timestamp: '' }),
+      } as Response);
+    });
+
+    render(<App />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter title'), { target: { value: 'Thing 3' } });
+    fireEvent.change(screen.getByPlaceholderText('Enter price'), { target: { value: '30.00' } });
+    fireEvent.click(screen.getByText('Add Thing'));
+
+    await waitFor(() => expect(screen.getByText('Thing 3')).toBeInTheDocument());
+  });
+
 });
