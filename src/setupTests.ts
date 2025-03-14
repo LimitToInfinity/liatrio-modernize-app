@@ -1,4 +1,8 @@
-import '@testing-library/jest-dom';
-import fetchMock from 'jest-fetch-mock';
+import "@testing-library/jest-dom/vitest"
+import { afterEach} from 'vitest'
+import { cleanup } from '@testing-library/react'
 
-fetchMock.enableMocks();
+// runs a clean after each test case (e.g. clearing jsdom)
+afterEach(() => {
+  cleanup();
+})
