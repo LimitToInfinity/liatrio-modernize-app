@@ -18,12 +18,8 @@ interface Thing {
   completed: boolean;
 }
 
-interface AnyObject {
-  [key: string]: any;
-}
-
 interface ThingsObject {
-  things_stored: AnyObject;
+  things_stored: Record<string, Thing>;
   timestamp: string;
 }
 
