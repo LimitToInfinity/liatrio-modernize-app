@@ -9,16 +9,25 @@ import "./App.scss";
 
 const apiUrl = 'http://localhost:3000/';
 
-export interface Thing {
+interface Thing {
   id: number;
   title: string;
   price: number;
   completed: boolean;
 }
 
+interface AnyObject {
+  [key: string]: any;
+}
+
+interface ThingsObject {
+  things_stored: AnyObject;
+  timestamp: string;
+}
+
 function App() {
 
-  const [thingsObject, setThingsObject] = useState<Thing[]>([]);
+  const [thingsObject, setThingsObject] = useState<ThingsObject>({ things_stored: {}, timestamp: '' });
   const [things, setThings] = useState<Thing[]>([]);
   const [newThing, setNewThing] = useState({ title: '', price: 0 });
   const [showToast, setShowToast] = useState(false);
