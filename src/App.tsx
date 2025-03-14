@@ -7,7 +7,9 @@ import Form from 'react-bootstrap/Form';
 import Toast from 'react-bootstrap/Toast';
 import "./App.scss";
 
-const apiUrl = 'http://localhost:3000/';
+const apiUrl = process.env.NODE_ENV === 'production' 
+  ? 'https://liatrio-modernize-api-7c6e1933e382.herokuapp.com/' 
+  : 'http://localhost:3000/';
 
 interface Thing {
   id: number;
