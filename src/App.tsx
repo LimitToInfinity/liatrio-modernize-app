@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import Toast from 'react-bootstrap/Toast';
 import "./App.scss";
 
 const apiUrl = 'http://localhost:3000/';
@@ -20,6 +21,8 @@ function App() {
   const [thingsObject, setThingsObject] = useState<Thing[]>([]);
   const [things, setThings] = useState<Thing[]>([]);
   const [newThing, setNewThing] = useState({ title: '', price: 0 });
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const fetchThings = async () => {
     const response = await fetch(`${apiUrl}things`);
@@ -62,16 +65,34 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await fetch(`${apiUrl}things`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newThing),
-    });
-    const createdThing = await response.json();
-    setThings([...things, createdThing]);
-    setNewThing({ title: '', price: 0 });
+    if (newThing.price > 2147483647) {
+      setToastMessage('Price cannot exceed 2,147,483,647');
+      setShowToast(true);
+      return;
+    }
+    try {
+      const response = await fetch(`${apiUrl}things`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...newThing, completed: false }),
+      });
+      const createdThing = await response.json();
+      if (response.ok) {
+        setThings([...things, createdThing]);
+        setNewThing({ title: '', price: 0 });
+      } else {
+        setToastMessage(`Failed to add new thing: ${createdThing.exception || 'please try again'}`);
+        setShowToast(true);
+        return;
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setToastMessage(`Failed to add new thing ${error.message}`);
+        setShowToast(true);
+      }
+    }
   };
 
   const renderThings = () => {
@@ -139,6 +160,11 @@ function App() {
           Add Thing
         </Button>
       </Form>
+      <div className="toast-container">
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide className="toast-error">
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </div>
     </>
   );
 }
