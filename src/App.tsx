@@ -6,6 +6,7 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Toast from 'react-bootstrap/Toast';
 import "./App.scss";
+import loadingGif from './assets/loading.gif';
 
 const apiUrl = process.env.NODE_ENV === 'production' 
   ? 'https://liatrio-modernize-api-7c6e1933e382.herokuapp.com/' 
@@ -32,6 +33,7 @@ function App() {
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const fetchThings = async () => {
     const response = await fetch(`${apiUrl}things`);
@@ -45,7 +47,11 @@ function App() {
   }
 
   useEffect(() => {
-    fetchThings();
+    const fetchData = async () => {
+      await fetchThings();
+      setLoading(false);
+    };
+    fetchData();
   }, []);
 
   const toggleCompleteThing = async (id: number, completed: boolean) => {
@@ -153,10 +159,29 @@ function App() {
         </Navbar>
       </header>
       <main>
-          <h1>Things</h1>
-          <div>{JSON.stringify(thingsObject)}</div>
-          <Button onClick={fetchThings}>Fetch Things</Button>
-          {renderThings()}
+        {loading ? (
+          <div style={{ 
+            position: 'fixed', 
+            top: '0', 
+            left: '0', 
+            width: '100vw', 
+            height: '100vh', 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            backgroundColor: 'rgba(217, 90, 90, 0.3)', 
+            zIndex: '9999' 
+          }}>
+            <img src={loadingGif} alt="Loading..." />
+          </div>
+        ) : (
+          <>
+            <h1>Things</h1>
+            <div>{JSON.stringify(thingsObject)}</div>
+            <Button onClick={fetchThings}>Fetch Things</Button>
+            {renderThings()}
+          </>
+        )}
       </main>
       <Form onSubmit={handleSubmit} style={{ margin: '1rem' }}>
         <Form.Group controlId="formTitle">
