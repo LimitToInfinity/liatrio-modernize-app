@@ -25,13 +25,13 @@ describe('App', () => {
         render(<App />);
 
         expect(screen.getByAltText('Loading...')).toBeInTheDocument();
-        await waitFor(() => expect(screen.queryByAltText('Loading...')).toBeInTheDocument());
+        await waitFor(() => expect(screen.queryByAltText('Loading...')).not.toBeInTheDocument());
     });
 
     it('fetches and displays things', async () => {
         render(<App />);
 
-        await waitFor(() => expect(screen.getByText('Thing 1')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText('Thing 4')).toBeInTheDocument());
         expect(screen.getByText('Thing 2')).toBeInTheDocument();
     });
 
