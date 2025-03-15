@@ -134,7 +134,14 @@ function App() {
         <Card.Body>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <Card.Title>{thing.title}</Card.Title>
-            <Button variant="link" onClick={() => deleteThing(thing.id)} style={{ color: 'red', textDecoration: 'none' }}>X</Button>
+            <Button
+              variant="link"
+              style={{ color: 'red', textDecoration: 'none', fontWeight: 'bold' }}
+              onClick={() => deleteThing(thing.id)}
+              data-testid={`delete-thing-${thing.id}`}
+            >
+              X
+            </Button>
           </div>
           <Card.Subtitle>{thing.completed ? 'completed' : 'awaiting'}</Card.Subtitle>
           <Card.Text>Price ${formatPrice(thing.price)}</Card.Text>
@@ -158,6 +165,7 @@ function App() {
           </Container>
         </Navbar>
       </header>
+
       <main>
         {loading ? (
           <div style={{ 
@@ -183,6 +191,7 @@ function App() {
           </>
         )}
       </main>
+
       <Form onSubmit={handleSubmit} style={{ margin: '1rem' }}>
         <Form.Group controlId="formTitle">
           <Form.Label>Title</Form.Label>
@@ -208,6 +217,7 @@ function App() {
           Add Thing
         </Button>
       </Form>
+
       <div className="toast-container">
         <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide className="toast-error">
           <Toast.Body>{toastMessage}</Toast.Body>
