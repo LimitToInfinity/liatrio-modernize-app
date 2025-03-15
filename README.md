@@ -97,6 +97,25 @@ To set up Git hooks locally, follow these steps:
    chmod +x .git/hooks/pre-push
 ```
 
+### Test Environment
+
+The project uses the following testing libraries and tools:
+
+- **Vitest**: A Vite-native unit testing framework.
+- **@testing-library/react**: A library for testing React components.
+- **@testing-library/jest-dom**: Custom jest matchers to test the state of the DOM.
+- **@testing-library/user-event**: Simulates user interactions with the DOM.
+- **jsdom**: A JavaScript implementation of the DOM and HTML standards, used for testing in a Node.js environment.
+
+## Running
+
+### Run the app
+
+To run the app locally, use the following command:
+```sh
+   npm run dev
+```
+
 ### Testing
 
 To run tests, use the following commands:
@@ -109,15 +128,19 @@ To run tests, use the following commands:
    npm run test:watch
 ```
 
-### Test Environment
+### Linting
 
-The project uses the following testing libraries and tools:
+To run linter, use the following command:
+```sh
+   npm run lint
+```
 
-- **Vitest**: A Vite-native unit testing framework.
-- **@testing-library/react**: A library for testing React components.
-- **@testing-library/jest-dom**: Custom jest matchers to test the state of the DOM.
-- **@testing-library/user-event**: Simulates user interactions with the DOM.
-- **jsdom**: A JavaScript implementation of the DOM and HTML standards, used for testing in a Node.js environment.
+### Building
+
+To build the app for production, use the following command:
+```sh
+   npm run build
+```
 
 #### License
 
