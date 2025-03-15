@@ -1,0 +1,33 @@
+#!/bin/sh
+
+npm run lint
+if [ $? -ne 0 ]; then
+    echo "\033[0;33m🧹 Linting failed. ⚠️\033[0m"
+
+    # Allows us to read user input below, assigns stdin to keyboard
+    exec < /dev/tty
+
+    while true; do
+        read -p "$(echo '\033[1;34mContinue anyway? \033[0;36m(y to continue, any other key to cancel): \033[0m')" yn
+        case $yn in
+            [Yy]* ) echo "\033[0;32mContinuing to testing.. 🧪\033[0m"; break;;
+            * ) echo "\033[0;31mAborting push. 🛑\033[0m"; exit 1;;
+        esac
+    done
+fi
+
+npm test
+if [ $? -ne 0 ]; then
+    echo "\033[0;33m🧪 Testing failed. ⚠️\033[0m"
+
+    # Allows us to read user input below, assigns stdin to keyboard
+    exec < /dev/tty
+
+    while true; do
+        read -p "$(echo '\033[1;34mPush anyway? \033[0;36m(y to push, any other key to cancel): \033[0m')" yn
+        case $yn in
+            [Yy]* ) echo "\033[0;32mPushing.. 🚀\033[0m"; break;;
+            * ) echo "\033[0;31mAborting push. 🛑\033[0m"; exit 1;;
+        esac
+    done
+fi

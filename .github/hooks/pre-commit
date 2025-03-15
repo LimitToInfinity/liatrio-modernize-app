@@ -1,0 +1,17 @@
+#!/bin/sh
+
+npm run lint
+if [ $? -ne 0 ]; then
+    echo "\033[0;33m🧹 Linting failed. ⚠️\033[0m"
+
+    # Allows us to read user input below, assigns stdin to keyboard
+    exec < /dev/tty
+
+    while true; do
+        read -p "$(echo '\033[1;34mCommit anyway? \033[0;36m(y to commit, any other key to cancel): \033[0m')" yn
+        case $yn in
+            [Yy]* ) echo "\033[0;32mCommitting.. ✍️\033[0m"; break;;
+            * ) echo "\033[0;31mAborting commit. 🛑\033[0m"; exit 1;;
+        esac
+    done
+fi
