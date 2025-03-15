@@ -31,7 +31,7 @@ describe('App', () => {
     it('fetches and displays things', async () => {
         render(<App />);
 
-        await waitFor(() => expect(screen.getByText('Thing 4')).toBeInTheDocument());
+        await waitFor(() => expect(screen.getByText('Thing 1')).toBeInTheDocument());
         expect(screen.getByText('Thing 2')).toBeInTheDocument();
     });
 

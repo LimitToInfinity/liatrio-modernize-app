@@ -24,7 +24,6 @@ interface ThingsObject {
   timestamp: string;
 }
 
-// @ts-ignore
 function App() {
 
   const [thingsObject, setThingsObject] = useState<ThingsObject>({ things_stored: {}, timestamp: '' });
