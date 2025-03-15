@@ -71,19 +71,19 @@ The following endpoints are used:
 
 ```plaintext
 liatrio-modernize-it/
-├── [public/](public)
+├── public/
 │   └── ...
-├── [src/](src)
-│   ├── [assets/](src/assets/)
+├── src/
+│   ├── assets/
 │   │   └── ...
-│   ├── [App.scss](src/App.scss)
-│   ├── [App.test.tsx](src/App.test.tsx)
-│   ├── [App.tsx](src/App.tsx)
-│   ├── [main.tsx](src/main.tsx)
+│   ├── App.scss
+│   ├── App.test.tsx
+│   ├── App.tsx
+│   ├── main.tsx
 │   └── ...
-├── [index.html](index.html)
-├── [package.json](package.json)
-├── [tsconfig.json](tsconfig.json)
+├── index.html
+├── package.json
+├── tsconfig.json
 └── ...
 ```
 
