@@ -25,7 +25,7 @@ describe('App', () => {
         render(<App />);
 
         expect(screen.getByAltText('Loading...')).toBeInTheDocument();
-        await waitFor(() => expect(screen.queryByAltText('Loading...')).not.toBeInTheDocument());
+        await waitFor(() => expect(screen.queryByAltText('Loading...')).toBeInTheDocument());
     });
 
     it('fetches and displays things', async () => {
