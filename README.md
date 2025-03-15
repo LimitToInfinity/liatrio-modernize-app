@@ -69,6 +69,7 @@ The following endpoints are used:
 
 ### File Structure
 
+```plaintext
 liatrio-modernize-it/
 ├── [public/](public)
 │   └── ...
@@ -84,6 +85,7 @@ liatrio-modernize-it/
 ├── [package.json](package.json)
 ├── [tsconfig.json](tsconfig.json)
 └── ...
+```
 
 ### Git Hooks (local)
 
