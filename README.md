@@ -41,19 +41,19 @@ Users can delete a thing by clicking the "X" button on the top right of the card
 
 1. Clone the repository:
 ```sh
-   git clone https://github.com/your-username/liatrio-modernize-it.git
+git clone https://github.com/your-username/liatrio-modernize-it.git
 ```
 2. Enter the repo:
 ```sh
-   cd liatrio-modernize-it
+cd liatrio-modernize-it
 ```
 3. Install packages
 ```sh
-   npm install
+npm install
 ```
 4. Start the app:
 ```sh
-   npm start
+npm start
 ```
 
 ### API
@@ -93,8 +93,8 @@ To set up Git hooks locally, follow these steps:
 1. Move the files from .github/hooks into your local repo .git/hooks folder.
 2. Run the following commands from the root of the project:
 ```sh
-   chmod +x .git/hooks/pre-commit
-   chmod +x .git/hooks/pre-push
+chmod +x .git/hooks/pre-commit
+chmod +x .git/hooks/pre-push
 ```
 
 ### Test Environment
@@ -113,7 +113,7 @@ The project uses the following testing libraries and tools:
 
 To run the app locally, use the following command:
 ```sh
-   npm run dev
+npm run dev
 ```
 
 ### Testing
@@ -121,25 +121,25 @@ To run the app locally, use the following command:
 To run tests, use the following commands:
 1. Run tests once
 ```sh
-   npm test
+npm test
 ```
 2. Run and Watch tests
 ```sh
-   npm run test:watch
+npm run test:watch
 ```
 
 ### Linting
 
 To run linter, use the following command:
 ```sh
-   npm run lint
+npm run lint
 ```
 
 ### Building
 
 To build the app for production, use the following command:
 ```sh
-   npm run build
+npm run build
 ```
 
 ## License
